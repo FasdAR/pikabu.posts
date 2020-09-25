@@ -3,7 +3,7 @@ package ru.fasdev.pikabuposts.domain.post.interactor
 import kotlinx.coroutines.flow.Flow
 import ru.fasdev.pikabuposts.domain.post.boundaries.interactor.PostNetworkInteractor
 import ru.fasdev.pikabuposts.domain.post.boundaries.repo.PostRepo
-import ru.fasdev.pikabuposts.domain.post.entity.Post
+import ru.fasdev.pikabuposts.domain.post.model.Post
 
 class PostNetworkInteractorImpl (val postRepo: PostRepo): PostNetworkInteractor
 {
