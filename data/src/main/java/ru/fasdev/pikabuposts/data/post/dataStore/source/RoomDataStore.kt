@@ -8,9 +8,11 @@ import ru.fasdev.pikabuposts.domain.post.model.Post
 
 class RoomDataStore(val postDao: PostDao) : LocalPostDataStore
 {
-    override fun savePost(post: Post)
+    override fun savePost(post: Post?)
     {
-        return postDao.insertPost(post.toPostDB())
+        post?.let {
+            postDao.insertPost(it.toPostDB())
+        }
     }
 
     override fun postIsSaved(id: Long): Boolean

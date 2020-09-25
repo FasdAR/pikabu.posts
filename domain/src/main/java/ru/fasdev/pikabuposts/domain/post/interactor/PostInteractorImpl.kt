@@ -7,7 +7,7 @@ import ru.fasdev.pikabuposts.domain.post.model.Post
 
 class PostInteractorImpl(val postRepo: PostRepo): PostInteractor
 {
-    override fun getPost(id: Long): Flow<Post>
+    override fun getPost(id: Long): Flow<Post?>
     {
         return postRepo.getPost(id)
     }

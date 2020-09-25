@@ -10,5 +10,5 @@ interface PikabuApi
     suspend fun getFeed(): List<Post>
 
     @GET("/page/interview/mobile-app/test-api/story.php")
-    suspend fun getStory(@Query("id") id: Long): Post
+    suspend fun getStory(@Query("id") id: Long): Post?
 }

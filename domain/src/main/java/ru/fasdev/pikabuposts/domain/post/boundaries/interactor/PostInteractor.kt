@@ -5,5 +5,5 @@ import ru.fasdev.pikabuposts.domain.post.model.Post
 
 interface PostInteractor
 {
-    fun getPost(id: Long): Flow<Post>
+    fun getPost(id: Long): Flow<Post?>
 }

@@ -11,7 +11,7 @@ class RetrofitDataStore(val pikabuApi: PikabuApi) : PostDataStore
         return pikabuApi.getFeed()
     }
 
-    override suspend fun getPost(id: Long): Post 
+    override suspend fun getPost(id: Long): Post?
     {
         return pikabuApi.getStory(id)
     }

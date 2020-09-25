@@ -16,7 +16,7 @@ class PostRepoImpl(val networkDataStore: PostDataStore, val localPostDataStore: 
         }.flowOn(Dispatchers.IO)
     }
 
-    override fun getPost(id: Long): Flow<Post>
+    override fun getPost(id: Long): Flow<Post?>
     {
         if (localPostDataStore.postIsSaved(id))
             return flow { emit(localPostDataStore.getPost(id)) }.flowOn(Dispatchers.IO)
