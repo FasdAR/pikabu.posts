@@ -4,6 +4,8 @@
     <color name="colorPrimaryDark">#83c355</color>
     <color name="colorAccent">#83c355</color>
 
+    <color name="colorPrimaryRipple">#72B740</color>
+
     <color name="colorBackground">#f2f2f2</color>
 
     <color name="colorToolbarPrimaryText">#fff</color>

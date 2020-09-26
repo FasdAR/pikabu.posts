@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Pikabu Posts</string>
+    <string name="feed_posts">Лента постов</string>
+    <string name="saved_posts">Сохраненные посты</string>
 </resources>
