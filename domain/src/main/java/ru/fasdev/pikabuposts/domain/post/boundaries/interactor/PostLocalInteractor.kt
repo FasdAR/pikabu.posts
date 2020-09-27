@@ -6,5 +6,6 @@ import ru.fasdev.pikabuposts.domain.post.model.Post
 interface PostLocalInteractor
 {
     fun getAllPosts(): Flow<List<Post>>
-    fun savePost(idPost: Long)
+    fun savePost(idPost: Long): Flow<Boolean>
+    fun isSaved(idPost: Long): Flow<Boolean>
 }

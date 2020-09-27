@@ -73,7 +73,7 @@ class SubFeedFragment : Fragment(), ListFeedModel.Listener
         binding = SubFeedFragmentBinding.inflate(inflater)
 
         binding.swipeRefresh.setOnRefreshListener {
-            viewModel.loadNetworkData()
+            viewModel.loadData()
         }
 
         binding.listFeed.layoutManager = LinearLayoutManager(requireContext())
@@ -88,8 +88,8 @@ class SubFeedFragment : Fragment(), ListFeedModel.Listener
         viewModel = injectViewModel(viewModelFactory)
         viewModel.setModeFeed(getMode())
 
-        viewModel.feed.observe(viewLifecycleOwner, Observer {
-            if (it.isNullOrEmpty()) {
+        viewModel.dataFeed.observe(viewLifecycleOwner, Observer {
+            if (it.first.isNullOrEmpty()) {
                 binding.listFeed.visibility = View.GONE
                 binding.textError.visibility = View.VISIBLE
 
@@ -100,7 +100,7 @@ class SubFeedFragment : Fragment(), ListFeedModel.Listener
                 binding.textError.visibility = View.GONE
                 binding.listFeed.visibility = View.VISIBLE
 
-                listFeedController.setData(it)
+                listFeedController.setData(it.first, it.second)
             }
         })
 

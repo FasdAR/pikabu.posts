@@ -55,6 +55,9 @@ abstract class ListFeedModel : EpoxyModelWithHolder<ListFeedModel.Holder>(), Vie
     lateinit var post: Post
 
     @EpoxyAttribute
+    var stateIsSaved: Boolean = false
+
+    @EpoxyAttribute
     lateinit var listener: Listener
 
     override fun bind(holder: Holder)
@@ -84,7 +87,7 @@ abstract class ListFeedModel : EpoxyModelWithHolder<ListFeedModel.Holder>(), Vie
             }
         }
 
-        if (post.isSaved)
+        if (stateIsSaved)
         {
             holder.saveBtn.setText(holder.resources.getString(R.string.remove_save))
             holder.saveBtn.setCompoundDrawablesWithIntrinsicBounds(

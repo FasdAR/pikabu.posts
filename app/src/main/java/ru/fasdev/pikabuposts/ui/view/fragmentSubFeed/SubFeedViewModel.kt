@@ -7,6 +7,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import ru.fasdev.pikabuposts.app.lifecycle.ZipLiveData
 import ru.fasdev.pikabuposts.domain.post.boundaries.interactor.PostLocalInteractor
 import ru.fasdev.pikabuposts.domain.post.boundaries.interactor.PostNetworkInteractor
 import ru.fasdev.pikabuposts.domain.post.model.Post
@@ -16,7 +17,11 @@ class SubFeedViewModel @Inject constructor(val postLocalInteractor: PostLocalInt
 {
     private var mode: Int = SubFeedFragment.LOCAL_MODE
 
-    val feed: MutableLiveData<List<Post>> = MutableLiveData()
+    private val feed: MutableLiveData<List<Post>> = MutableLiveData()
+    private val idSavedPosts: MutableLiveData<List<Long>> = MutableLiveData()
+
+    val dataFeed = ZipLiveData.zipLiveData(feed, idSavedPosts)
+
     var isRefreshed: MutableLiveData<Boolean> = MutableLiveData()
     val error: MutableLiveData<String> = MutableLiveData()
 
@@ -24,38 +29,79 @@ class SubFeedViewModel @Inject constructor(val postLocalInteractor: PostLocalInt
     {
         this.mode = mode
 
-        loadNetworkData()
+        loadData()
     }
 
-    fun loadNetworkData() {
+    fun loadData() {
         viewModelScope.launch(Dispatchers.IO) {
-            val flow: Flow<List<Post>> =
-                if (mode == SubFeedFragment.LOCAL_MODE)
-                    postLocalInteractor.getAllPosts()
-                else
-                    postNetworkInteractor.getAllPosts()
+            loadPosts()
+            loadIdSavedPosts()
+        }
+    }
 
-            flow
-                .flowOn(Dispatchers.IO)
-                .onStart {
-                    isRefreshed.postValue(true)
+    private suspend fun loadPosts() {
+        val flow: Flow<List<Post>> =
+            if (mode == SubFeedFragment.LOCAL_MODE)
+                postLocalInteractor.getAllPosts()
+            else
+                postNetworkInteractor.getAllPosts()
+
+        flow
+            .flowOn(Dispatchers.IO)
+            .onStart {
+                isRefreshed.postValue(true)
+            }
+            .onCompletion {
+                isRefreshed.postValue(false)
+            }
+            .catch {
+                //TODO: CHANGE TO NORMAL ERROR
+                error.postValue(it.message.toString())
+                Log.e("EROROR", it.message.toString())
+            }
+            .collect {
+                feed.postValue(it)
+            }
+    }
+
+    private suspend fun loadIdSavedPosts() {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                flow {
+                    emit(
+                        postLocalInteractor.getAllPosts()
+                            .flatMapMerge { it.asFlow() }
+                            .map { it.id }
+                            .toList()
+                    )
                 }
-                .onCompletion {
-                    isRefreshed.postValue(false)
-                }
-                .catch {
-                    //TODO: CHANGE TO NORMAL ERROR
-                    error.postValue(it.message.toString())
-                    Log.e("EROROR", it.message.toString())
-                }
-                .collect {
-                    feed.postValue(it)
-                }
+                    .flowOn(Dispatchers.IO)
+                    .collect {
+                        idSavedPosts.postValue(it)
+                    }
+            }
         }
     }
 
     fun savedPost(id: Long)
     {
-        //TODO: ADD LOGIC BY SAVED POST
+        viewModelScope.launch(Dispatchers.IO) {
+            postLocalInteractor.savePost(id)
+                .flowOn(Dispatchers.IO)
+                .onStart {
+
+                }
+                .onCompletion {
+
+                }
+                .catch {
+                    error.postValue(it.message)
+                }
+                .collect {
+                    loadIdSavedPosts()
+                }
+
+        }
+        postLocalInteractor.savePost(id)
     }
 }

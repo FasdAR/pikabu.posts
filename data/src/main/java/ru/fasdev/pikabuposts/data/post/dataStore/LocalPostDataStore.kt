@@ -6,4 +6,5 @@ interface LocalPostDataStore: PostDataStore
 {
     fun savePost(post: Post?)
     fun postIsSaved(id: Long): Boolean
+    fun removePost(id: Long)
 }

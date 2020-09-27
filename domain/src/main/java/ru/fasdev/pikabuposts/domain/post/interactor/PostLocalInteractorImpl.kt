@@ -12,8 +12,13 @@ class PostLocalInteractorImpl(val postRepo: PostRepo) : PostLocalInteractor
         return postRepo.getAllSavedPosts()
     }
 
-    override fun savePost(idPost: Long)
+    override fun savePost(idPost: Long): Flow<Boolean>
     {
-        postRepo.savePost(idPost)
+        return postRepo.savePost(idPost)
+    }
+
+    override fun isSaved(idPost: Long): Flow<Boolean>
+    {
+        return postRepo.postIsSaved(idPost)
     }
 }

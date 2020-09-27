@@ -21,6 +21,11 @@ class RoomDataStore(val postDao: PostDao) : LocalPostDataStore
         return postDao.getById(id) != null
     }
 
+    override fun removePost(id: Long)
+    {
+        postDao.removeById(id)
+    }
+
     override suspend fun getPosts(): List<Post>
     {
         return postDao.getAll().map { it -> it.toPost() }

@@ -82,6 +82,7 @@ class PostFragment : Fragment(), View.OnClickListener
 
         appCompactActivity.supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_arrow_back)
         appCompactActivity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        setHasOptionsMenu(true)
 
         toolbar.setTitle(resources.getString(R.string.post))
 
@@ -97,19 +98,43 @@ class PostFragment : Fragment(), View.OnClickListener
         viewModel = injectViewModel(viewModelFactory)
         viewModel.setIdPost(getIdKey())
 
-        viewModel.post.observe(viewLifecycleOwner, Observer {
-            if (it != null)
+        viewModel.data.observe(viewLifecycleOwner, Observer {
+            val post = it.first
+            val isSaved = it.second
+
+            if (isSaved)
+            {
+                binding.saveBtn.setText(resources.getString(R.string.remove_save))
+                binding.saveBtn.setCompoundDrawablesWithIntrinsicBounds(
+                    R.drawable.ic_cloud_done,
+                    0,
+                    0,
+                    0
+                )
+            }
+            else
+            {
+                binding.saveBtn.setText(resources.getString(R.string.save))
+                binding.saveBtn.setCompoundDrawablesWithIntrinsicBounds(
+                    R.drawable.ic_cloud_download,
+                    0,
+                    0,
+                    0
+                )
+            }
+
+            if (post != null)
             {
                 binding.post.visibility = View.VISIBLE
-                binding.title.setText(it.title)
-                binding.body.setText(it.body)
+                binding.title.setText(post.title)
+                binding.body.setText(post.body)
 
-                if (it.body.isNullOrEmpty())
+                if (post.body.isNullOrEmpty())
                     binding.body.visibility = View.GONE
                 else
                     binding.body.visibility = View.VISIBLE
 
-                val imageSize = it.images?.size ?: 0
+                val imageSize = post.images?.size ?: 0
                 val mainImage = binding.root.findViewById<ImageView>(R.id.main_image)
 
                 if (imageSize != 0)
@@ -118,7 +143,7 @@ class PostFragment : Fragment(), View.OnClickListener
 
                     Glide
                         .with(this)
-                        .load(it.images?.get(0))
+                        .load(post.images?.get(0))
                         .apply(getImageRequestOprion())
                         .transition(DrawableTransitionOptions.withCrossFade())
                         .into(mainImage);
@@ -126,7 +151,7 @@ class PostFragment : Fragment(), View.OnClickListener
                     if (imageSize >= 1)
                     {
                         binding.listImages.visibility = View.VISIBLE
-                        listImageController.setData(it.images?.subList(1, imageSize))
+                        listImageController.setData(post.images?.subList(1, imageSize))
                     }
                     else
                     {
@@ -137,27 +162,6 @@ class PostFragment : Fragment(), View.OnClickListener
                 {
                     binding.listImages.visibility = View.GONE
                     mainImage.visibility = View.GONE
-                }
-
-                if (it.isSaved)
-                {
-                    binding.saveBtn.setText(resources.getString(R.string.remove_save))
-                    binding.saveBtn.setCompoundDrawablesWithIntrinsicBounds(
-                        R.drawable.ic_cloud_done,
-                        0,
-                        0,
-                        0
-                    )
-                }
-                else
-                {
-                    binding.saveBtn.setText(resources.getString(R.string.save))
-                    binding.saveBtn.setCompoundDrawablesWithIntrinsicBounds(
-                        R.drawable.ic_cloud_download,
-                        0,
-                        0,
-                        0
-                    )
                 }
 
                 binding.saveBtn.setOnClickListener(this)

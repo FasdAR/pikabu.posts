@@ -11,4 +11,5 @@ interface PostRepo
 
     fun savePost(idPost: Long): Flow<Boolean>
     fun getAllSavedPosts(): Flow<List<Post>>
+    fun postIsSaved(idPost: Long): Flow<Boolean>
 }

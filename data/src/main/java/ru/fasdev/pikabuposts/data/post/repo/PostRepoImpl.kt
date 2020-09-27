@@ -13,28 +13,30 @@ class PostRepoImpl(val networkDataStore: PostDataStore, val localPostDataStore: 
     override fun getAllPosts(): Flow<List<Post>>
     {
         return flow {
-            val list: List<Post> = networkDataStore.getPosts()
-
-            list.forEach {
-                it.isSaved = localPostDataStore.postIsSaved(it.id)
-            }
-
-            emit(list)
+            emit(networkDataStore.getPosts())
         }.flowOn(Dispatchers.IO)
     }
 
     override fun getPost(id: Long): Flow<Post?>
     {
-        if (localPostDataStore.postIsSaved(id))
-            return flow { emit(localPostDataStore.getPost(id)) }.flowOn(Dispatchers.IO)
-        else
-            return flow { emit(networkDataStore.getPost(id)) }.flowOn(Dispatchers.IO)
+        return flow {
+            val post: Post? = if (localPostDataStore.postIsSaved(id)) localPostDataStore.getPost(id) else networkDataStore.getPost(id)
+            emit(post)
+        }
     }
 
     override fun savePost(idPost: Long): Flow<Boolean>
     {
         return flow {
-            localPostDataStore.savePost(networkDataStore.getPost(idPost))
+            if (localPostDataStore.postIsSaved(idPost))
+            {
+                localPostDataStore.removePost(idPost)
+            }
+            else
+            {
+                localPostDataStore.savePost(networkDataStore.getPost(idPost))
+            }
+
             emit(localPostDataStore.postIsSaved(idPost))
         }.flowOn(Dispatchers.IO)
     }
@@ -44,5 +46,10 @@ class PostRepoImpl(val networkDataStore: PostDataStore, val localPostDataStore: 
         return flow {
             emit(localPostDataStore.getPosts())
         }.flowOn(Dispatchers.IO)
+    }
+
+    override fun postIsSaved(id: Long): Flow<Boolean>
+    {
+        return flow { emit(localPostDataStore.postIsSaved(id)) }.flowOn(Dispatchers.IO)
     }
 }
