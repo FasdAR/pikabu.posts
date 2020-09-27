@@ -20,4 +20,9 @@ abstract class ViewModelModule
     @IntoMap
     @ViewModelKey(SubFeedViewModel::class)
     abstract fun subViewModel(subVm: SubFeedViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(PostViewModel::class)
+    abstract fun postViewModel(postVm: PostViewModel): ViewModel
 }

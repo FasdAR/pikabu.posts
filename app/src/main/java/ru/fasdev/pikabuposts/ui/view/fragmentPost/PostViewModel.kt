@@ -11,7 +11,7 @@ import ru.fasdev.pikabuposts.domain.post.boundaries.interactor.PostLocalInteract
 import ru.fasdev.pikabuposts.domain.post.model.Post
 import javax.inject.Inject
 
-class PostViewModel: ViewModel() //@Inject constructor(val postInteractor: PostInteractor): ViewModel()
+class PostViewModel @Inject constructor(val postInteractor: PostInteractor): ViewModel()
 {
     var id: Long = 0L
 
@@ -23,10 +23,9 @@ class PostViewModel: ViewModel() //@Inject constructor(val postInteractor: PostI
     {
         this.id = id
 
-        //loadPost()
+        loadPost()
     }
 
-    /*
     fun loadPost()
     {
         viewModelScope.launch {
@@ -46,7 +45,7 @@ class PostViewModel: ViewModel() //@Inject constructor(val postInteractor: PostI
                     post.postValue(it)
                 }
         }
-    }*/
+    }
 
     fun savedPost()
     {

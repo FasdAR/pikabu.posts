@@ -58,8 +58,6 @@ class SubFeedFragment : Fragment(), ListFeedModel.Listener
         return@lazy (parentFragment as MainFeedFragment).fragmentSubComponent
             .feedComponent()
             .build()
-            .feedFragmentComponent()
-            .build()
     }
 
     val listFeedController: ListFeedController = ListFeedController(this)

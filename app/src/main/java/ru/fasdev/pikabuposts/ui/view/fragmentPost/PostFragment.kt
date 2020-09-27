@@ -60,8 +60,6 @@ class PostFragment : Fragment(), View.OnClickListener
             .build()
             .feedComponent()
             .build()
-            .postFragmentComponent()
-            .build()
     }
 
     val listImageController = ListImageController()
@@ -70,7 +68,7 @@ class PostFragment : Fragment(), View.OnClickListener
     {
         super.onAttach(context)
 
-        //fragmentPostComponent.inject(this)
+        fragmentPostComponent.inject(this)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?
@@ -96,7 +94,7 @@ class PostFragment : Fragment(), View.OnClickListener
     override fun onActivityCreated(savedInstanceState: Bundle?)
     {
         super.onActivityCreated(savedInstanceState)
-        //viewModel = injectViewModel(viewModelFactory)
+        viewModel = injectViewModel(viewModelFactory)
         viewModel.setIdPost(getIdKey())
 
         viewModel.post.observe(viewLifecycleOwner, Observer {
