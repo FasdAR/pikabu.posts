@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/swipe_refresh"
     tools:context=".ui.view.fragmentSubFeed.SubFeedFragment">
 
@@ -15,7 +15,10 @@
         <com.airbnb.epoxy.EpoxyRecyclerView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/list_feed" />
+            android:id="@+id/list_feed"
+            android:paddingBottom="16dp"
+            android:clipToPadding="false"
+            app:itemSpacing="16dp"/>
 
         <TextView
             android:layout_width="match_parent"

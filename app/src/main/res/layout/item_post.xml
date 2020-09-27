@@ -5,42 +5,66 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="#fff"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:id="@+id/root_view">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Title post"
-        android:padding="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="16dp"
         android:textColor="#000"
         android:textSize="16sp"
         android:textStyle="bold"
-        android:id="@+id/title"
-        app:layout_constraintTop_toTopOf="parent"/>
+        android:id="@+id/title" />
 
     <ImageView
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:background="@color/colorPlaceholderBg"
-        app:layout_constraintTop_toBottomOf="@id/title"/>
+        android:layout_height="wrap_content"
+        android:minHeight="200dp"
+        android:id="@+id/main_image"
+        android:layout_marginBottom="16dp"
+        android:adjustViewBounds="true"
+        android:background="@color/colorPlaceholderBg"/>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="16dp"
         android:textSize="14sp"
         android:textColor="#000"
-        android:text="body example"/>
+        android:text="body example"
+        android:maxLines="3"
+        android:ellipsize="end"
+        android:id="@+id/body"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/read_more"
+        android:layout_marginRight="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginBottom="16dp"
+        android:textSize="14sp"
+        android:id="@+id/read_more"
+        android:visibility="gone"
+        android:textColor="@color/colorAccentSecondary"/>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="#ebebeb"/>
+        android:background="#ebebeb" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#fff"
+        android:id="@+id/save_btn"
+        android:background="@drawable/ripple_btn_white"
         android:text="@string/save"
         android:textAllCaps="false"
         android:gravity="left|center_vertical"

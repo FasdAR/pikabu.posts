@@ -4,6 +4,8 @@
     <string name="saved_posts">Сохраненные посты</string>
 
     <string name="empty_list">Пока список пустой :(</string>
+
     <string name="save">Сохранить</string>
     <string name="remove_save">Убрать из сохраненного</string>
+    <string name="read_more">Читать далее</string>
 </resources>

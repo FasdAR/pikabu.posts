@@ -14,4 +14,5 @@
     <color name="colorToolbarActionMenuText">#fff</color>
 
     <color name="colorPlaceholderBg">#f2f2f2</color>
+    <color name="colorPlaceholderErrBg">#F6C6C6</color>
 </resources>
