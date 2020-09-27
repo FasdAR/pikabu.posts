@@ -53,4 +53,9 @@ class SubFeedViewModel @Inject constructor(val postLocalInteractor: PostLocalInt
                 }
         }
     }
+
+    fun savedPost(id: Long)
+    {
+        //TODO: ADD LOGIC BY SAVED POST
+    }
 }

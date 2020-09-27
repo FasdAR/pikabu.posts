@@ -7,6 +7,7 @@ import dagger.Module
 import dagger.multibindings.IntoMap
 import ru.fasdev.pikabuposts.app.di.key.ViewModelKey
 import ru.fasdev.pikabuposts.app.lifecycle.ViewModelFactory
+import ru.fasdev.pikabuposts.ui.view.fragmentPost.PostViewModel
 import ru.fasdev.pikabuposts.ui.view.fragmentSubFeed.SubFeedViewModel
 
 @Module
@@ -18,5 +19,5 @@ abstract class ViewModelModule
     @Binds
     @IntoMap
     @ViewModelKey(SubFeedViewModel::class)
-    abstract fun subFeedViewModel(vm: SubFeedViewModel): ViewModel
+    abstract fun subViewModel(subVm: SubFeedViewModel): ViewModel
 }

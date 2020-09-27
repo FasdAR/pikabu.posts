@@ -22,6 +22,8 @@ import ru.fasdev.pikabuposts.ui.adapter.epoxy.listFeed.ListFeedController
 import ru.fasdev.pikabuposts.ui.adapter.epoxy.listFeed.ListFeedModel
 import ru.fasdev.pikabuposts.ui.view.activityMain.MainActivity
 import ru.fasdev.pikabuposts.ui.view.fragmentMainFeed.MainFeedFragment
+import ru.fasdev.pikabuposts.ui.view.fragmentPost.PostScreen
+import ru.terrakok.cicerone.Router
 import javax.inject.Inject
 
 class SubFeedFragment : Fragment(), ListFeedModel.Listener
@@ -48,6 +50,9 @@ class SubFeedFragment : Fragment(), ListFeedModel.Listener
 
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
+
+    @Inject
+    lateinit var router: Router
 
     val fragmentFeedComponent by lazy {
         return@lazy (parentFragment as MainFeedFragment).fragmentSubComponent
@@ -110,9 +115,11 @@ class SubFeedFragment : Fragment(), ListFeedModel.Listener
 
     override fun savedClick(id: Long)
     {
+        viewModel.savedPost(id)
     }
 
     override fun readMoreClick(id: Long)
     {
+        router.navigateTo(PostScreen(id))
     }
 }

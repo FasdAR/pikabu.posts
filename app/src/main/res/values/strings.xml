@@ -3,6 +3,8 @@
     <string name="feed_posts">Лента постов</string>
     <string name="saved_posts">Сохраненные посты</string>
 
+    <string name="post">Пост</string>
+
     <string name="empty_list">Пока список пустой :(</string>
 
     <string name="save">Сохранить</string>

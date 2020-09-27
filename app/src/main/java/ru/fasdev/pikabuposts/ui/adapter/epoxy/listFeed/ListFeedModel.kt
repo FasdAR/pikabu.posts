@@ -13,6 +13,7 @@ import com.airbnb.epoxy.EpoxyModelWithHolder
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import ru.fasdev.pikabuposts.R
+import ru.fasdev.pikabuposts.app.glide.getImageRequestOprion
 import ru.fasdev.pikabuposts.domain.post.model.Post
 
 @EpoxyModelClass(layout = R.layout.item_post)
@@ -115,8 +116,7 @@ abstract class ListFeedModel : EpoxyModelWithHolder<ListFeedModel.Holder>(), Vie
             Glide
                 .with(holder.context)
                 .load(post.images?.get(0))
-                .placeholder(R.drawable.list_placeholder_img)
-                .error(R.drawable.list_placeholder_err_img)
+                .apply(getImageRequestOprion())
                 .transition(DrawableTransitionOptions.withCrossFade())
                 .into(holder.mainImage);
         }

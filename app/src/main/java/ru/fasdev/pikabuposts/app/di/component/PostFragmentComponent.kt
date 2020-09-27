@@ -5,6 +5,7 @@ import dagger.Subcomponent
 import ru.fasdev.pikabuposts.app.di.module.postFragment.PostFragmentModule
 import ru.fasdev.pikabuposts.app.di.scope.FragmentScope
 import ru.fasdev.pikabuposts.app.di.scope.PostFragmentScope
+import ru.fasdev.pikabuposts.ui.view.fragmentPost.PostFragment
 
 @PostFragmentScope
 @Subcomponent(modules = [PostFragmentModule::class])
