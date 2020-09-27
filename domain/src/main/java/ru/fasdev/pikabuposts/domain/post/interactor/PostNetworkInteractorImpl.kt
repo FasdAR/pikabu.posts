@@ -11,7 +11,6 @@ class PostNetworkInteractorImpl (val postRepo: PostRepo): PostNetworkInteractor
 {
     override fun getAllPosts(): Flow<List<Post>>
     {
-        //TODO: ADD SORTING
         return postRepo.getAllPosts().flowOn(Dispatchers.IO)
     }
 }

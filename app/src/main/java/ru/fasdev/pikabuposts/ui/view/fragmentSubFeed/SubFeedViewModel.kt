@@ -1,19 +1,26 @@
 package ru.fasdev.pikabuposts.ui.view.fragmentSubFeed
 
+import android.content.Context
 import android.util.Log
-import androidx.lifecycle.*
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import retrofit2.HttpException
+import ru.fasdev.pikabuposts.R
 import ru.fasdev.pikabuposts.app.lifecycle.ZipLiveData
 import ru.fasdev.pikabuposts.domain.post.boundaries.interactor.PostLocalInteractor
 import ru.fasdev.pikabuposts.domain.post.boundaries.interactor.PostNetworkInteractor
 import ru.fasdev.pikabuposts.domain.post.model.Post
+import java.lang.Exception
+import java.lang.RuntimeException
+import java.net.UnknownHostException
 import javax.inject.Inject
 
-class SubFeedViewModel @Inject constructor(val postLocalInteractor: PostLocalInteractor, val postNetworkInteractor: PostNetworkInteractor) : ViewModel()
+class SubFeedViewModel @Inject constructor(val postLocalInteractor: PostLocalInteractor, val postNetworkInteractor: PostNetworkInteractor, val context: Context) : ViewModel()
 {
     private var mode: Int = SubFeedFragment.LOCAL_MODE
 
@@ -55,9 +62,7 @@ class SubFeedViewModel @Inject constructor(val postLocalInteractor: PostLocalInt
                 isRefreshed.postValue(false)
             }
             .catch {
-                //TODO: CHANGE TO NORMAL ERROR
-                error.postValue(it.message.toString())
-                Log.e("EROROR", it.message.toString())
+                error.postValue(getErrorMsg(it))
             }
             .collect {
                 feed.postValue(it)
@@ -95,7 +100,7 @@ class SubFeedViewModel @Inject constructor(val postLocalInteractor: PostLocalInt
 
                 }
                 .catch {
-                    error.postValue(it.message)
+                    error.postValue(getErrorMsg(it))
                 }
                 .collect {
                     loadIdSavedPosts()
@@ -103,5 +108,17 @@ class SubFeedViewModel @Inject constructor(val postLocalInteractor: PostLocalInt
 
         }
         postLocalInteractor.savePost(id)
+    }
+
+    fun getErrorMsg(ex: Throwable): String {
+        when (ex)
+        {
+            is UnknownHostException -> {
+                return context.resources.getString(R.string.no_internet)
+            }
+            else -> {
+                return context.resources.getString(R.string.no_internet)
+            }
+        }
     }
 }
