@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import ru.fasdev.pikabuposts.domain.post.boundaries.interactor.PostInteractor
 import ru.fasdev.pikabuposts.domain.post.boundaries.interactor.PostLocalInteractor
 import ru.fasdev.pikabuposts.domain.post.model.Post
@@ -29,21 +30,24 @@ class PostViewModel @Inject constructor(val postInteractor: PostInteractor): Vie
     fun loadPost()
     {
         viewModelScope.launch {
-            postInteractor.getPost(id)
-                .flowOn(Dispatchers.IO)
-                .onStart {
-                    isRefreshed.postValue(true)
-                }
-                .onCompletion {
-                    isRefreshed.postValue(false)
-                }
-                .catch {
-                    //TODO: CHANGE TO NORMAL ERROR
-                    error.postValue(it.message.toString())
-                }
-                .collect {
-                    post.postValue(it)
-                }
+            withContext(Dispatchers.IO)
+            {
+                postInteractor.getPost(id)
+                    .flowOn(Dispatchers.IO)
+                    .onStart {
+                        isRefreshed.postValue(true)
+                    }
+                    .onCompletion {
+                        isRefreshed.postValue(false)
+                    }
+                    .catch {
+                        //TODO: CHANGE TO NORMAL ERROR
+                        error.postValue(it.message.toString())
+                    }
+                    .collect {
+                        post.postValue(it)
+                    }
+            }
         }
     }
 

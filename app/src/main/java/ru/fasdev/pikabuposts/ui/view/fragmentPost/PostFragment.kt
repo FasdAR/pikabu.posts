@@ -104,23 +104,39 @@ class PostFragment : Fragment(), View.OnClickListener
                 binding.title.setText(it.title)
                 binding.body.setText(it.body)
 
-                Glide
-                    .with(this)
-                    .load(it.images?.get(0))
-                    .apply(getImageRequestOprion())
-                    .transition(DrawableTransitionOptions.withCrossFade())
-                    .into(binding.root.findViewById<ImageView>(R.id.main_image));
+                if (it.body.isNullOrEmpty())
+                    binding.body.visibility = View.GONE
+                else
+                    binding.body.visibility = View.VISIBLE
 
                 val imageSize = it.images?.size ?: 0
+                val mainImage = binding.root.findViewById<ImageView>(R.id.main_image)
 
-                if (imageSize > 1)
+                if (imageSize != 0)
                 {
-                    binding.listImages.visibility = View.VISIBLE
-                    listImageController.setData(it.images?.subList(1, imageSize))
+                    mainImage.visibility = View.VISIBLE
+
+                    Glide
+                        .with(this)
+                        .load(it.images?.get(0))
+                        .apply(getImageRequestOprion())
+                        .transition(DrawableTransitionOptions.withCrossFade())
+                        .into(mainImage);
+
+                    if (imageSize >= 1)
+                    {
+                        binding.listImages.visibility = View.VISIBLE
+                        listImageController.setData(it.images?.subList(1, imageSize))
+                    }
+                    else
+                    {
+                        binding.listImages.visibility = View.GONE
+                    }
                 }
                 else
                 {
                     binding.listImages.visibility = View.GONE
+                    mainImage.visibility = View.GONE
                 }
 
                 if (it.isSaved)
