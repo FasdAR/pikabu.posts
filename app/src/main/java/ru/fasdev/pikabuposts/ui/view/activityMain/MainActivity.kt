@@ -5,7 +5,6 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import ru.fasdev.pikabuposts.R
 import ru.fasdev.pikabuposts.app.PikabuPostApp
-import ru.fasdev.pikabuposts.app.di.component.DaggerActivityComponent
 import ru.fasdev.pikabuposts.app.di.module.activity.ActivityModule
 import ru.fasdev.pikabuposts.app.di.module.activity.CiceroneModule
 import ru.fasdev.pikabuposts.ui.view.fragmentMainFeed.MainFeedScreen
@@ -26,9 +25,8 @@ class MainActivity : AppCompatActivity()
     lateinit var navigator: SupportAppNavigator
 
     val activitySubComponent by lazy {
-        return@lazy DaggerActivityComponent
-            .builder()
-            .appComponent(PikabuPostApp.DI.appComponent)
+        return@lazy PikabuPostApp.DI.appComponent
+            .activityComponent()
             .activityModule(ActivityModule(this))
             .ciceroneModule(CiceroneModule(R.id.main_container))
             .build()

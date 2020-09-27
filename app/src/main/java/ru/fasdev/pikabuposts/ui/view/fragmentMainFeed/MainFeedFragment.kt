@@ -12,7 +12,6 @@ import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import ru.fasdev.pikabuposts.R
-import ru.fasdev.pikabuposts.app.di.component.DaggerFeedFragmentComponent
 import ru.fasdev.pikabuposts.databinding.MainFeedFragmentBinding
 import ru.fasdev.pikabuposts.ui.adapter.viewPager.VPFragments
 import ru.fasdev.pikabuposts.ui.adapter.viewPager.fabric.source.FeedFabric
@@ -40,9 +39,8 @@ class MainFeedFragment : Fragment()
     }
 
     val fragmentSubComponent by lazy {
-        return@lazy DaggerFeedFragmentComponent
-            .builder()
-            .activityComponent((requireActivity() as MainActivity).activitySubComponent)
+        return@lazy (requireActivity() as MainActivity).activitySubComponent
+            .fragmentComponent()
             .build()
     }
 

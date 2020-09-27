@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#fff"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Title post"
+        android:padding="16dp"
+        android:textColor="#000"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:id="@+id/title"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:background="@color/colorPlaceholderBg"
+        app:layout_constraintTop_toBottomOf="@id/title"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:textSize="14sp"
+        android:textColor="#000"
+        android:text="body example"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#ebebeb"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#fff"
+        android:text="@string/save"
+        android:textAllCaps="false"
+        android:gravity="left|center_vertical"
+        android:padding="16dp"
+        android:textSize="14sp"
+        android:textStyle="normal"
+        android:textColor="@color/colorAccentSecondary"
+        android:drawableLeft="@drawable/ic_cloud_download"
+        android:drawablePadding="16dp"/>
+
+</LinearLayout>

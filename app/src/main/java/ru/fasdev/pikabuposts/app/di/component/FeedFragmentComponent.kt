@@ -1,15 +1,21 @@
 package ru.fasdev.pikabuposts.app.di.component
 
+import androidx.lifecycle.ViewModelProvider
 import dagger.Component
-import ru.fasdev.pikabuposts.app.di.module.app.RetrofitApiModule
-import ru.fasdev.pikabuposts.app.di.module.feed.FeedModule
-import ru.fasdev.pikabuposts.app.di.module.repo.RepoModule
+import dagger.Subcomponent
+import ru.fasdev.pikabuposts.app.di.module.feedFragment.FeedFragmentModule
+import ru.fasdev.pikabuposts.app.di.scope.FeedFragmentScope
 import ru.fasdev.pikabuposts.app.di.scope.FragmentScope
-import ru.fasdev.pikabuposts.ui.view.fragmentMainFeed.MainFeedFragment
+import ru.fasdev.pikabuposts.ui.view.fragmentSubFeed.SubFeedFragment
 
-@FragmentScope
-@Component(dependencies = [ActivityComponent::class], modules = [FeedModule::class])
+@FeedFragmentScope
+@Subcomponent(modules = [FeedFragmentModule::class])
 interface FeedFragmentComponent
 {
-    fun inject(fragment: MainFeedFragment)
+    @Subcomponent.Builder
+    interface Builder {
+        fun build(): FeedFragmentComponent
+    }
+
+    fun inject(subFeedFragment: SubFeedFragment)
 }

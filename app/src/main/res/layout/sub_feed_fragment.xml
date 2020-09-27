@@ -4,12 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/swipe_refresh"
     tools:context=".ui.view.fragmentSubFeed.SubFeedFragment">
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
 
         <com.airbnb.epoxy.EpoxyRecyclerView
@@ -18,17 +18,15 @@
             android:id="@+id/list_feed" />
 
         <TextView
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="К сожалению пока нету сохраненных постов :("
+            android:text=""
             android:gravity="center"
             android:textColor="#000"
             android:id="@+id/text_error"
-            android:visibility="gone"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"/>
+            android:visibility="visible"
+            android:layout_gravity="center"
+            android:layout_marginBottom="40dp"/>
 
     </FrameLayout>
 
