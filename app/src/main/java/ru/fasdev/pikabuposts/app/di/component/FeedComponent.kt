@@ -22,6 +22,7 @@ interface FeedComponent
         fun build(): FeedComponent
     }
 
+    fun inject(app: MainFeedFragment)
     fun inject(subFragment: SubFeedFragment)
     fun inject(postFragment: PostFragment)
 }

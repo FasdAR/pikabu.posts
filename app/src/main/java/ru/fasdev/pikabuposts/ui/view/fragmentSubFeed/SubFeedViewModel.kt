@@ -32,6 +32,10 @@ class SubFeedViewModel @Inject constructor(val postLocalInteractor: PostLocalInt
     var isRefreshed: MutableLiveData<Boolean> = MutableLiveData()
     val error: MutableLiveData<String> = MutableLiveData()
 
+    init {
+        Log.d("MODEL", System.identityHashCode(postLocalInteractor).toString())
+    }
+
     fun setModeFeed(mode: Int)
     {
         this.mode = mode

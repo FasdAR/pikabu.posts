@@ -1,5 +1,6 @@
 package ru.fasdev.pikabuposts.ui.view.fragmentPost
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -23,6 +24,10 @@ class PostViewModel @Inject constructor(val postInteractor: PostInteractor, val 
     val error: MutableLiveData<String> = MutableLiveData()
 
     val data = ZipLiveData.zipLiveData(post, isSaved)
+
+    init {
+        Log.d("MODEL", System.identityHashCode(localInteractor).toString())
+    }
 
     fun setIdPost(id: Long)
     {

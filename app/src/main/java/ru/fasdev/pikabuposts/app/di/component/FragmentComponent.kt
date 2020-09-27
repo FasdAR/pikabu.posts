@@ -25,5 +25,4 @@ interface FragmentComponent
     }
 
     fun feedComponent(): FeedComponent.Builder
-    fun inject(app: MainFeedFragment)
 }

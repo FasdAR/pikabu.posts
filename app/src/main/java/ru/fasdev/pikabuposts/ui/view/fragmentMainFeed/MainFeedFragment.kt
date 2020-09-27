@@ -43,6 +43,8 @@ class MainFeedFragment : Fragment()
         return@lazy (requireActivity() as MainActivity).activitySubComponent
             .fragmentComponent()
             .build()
+            .feedComponent()
+            .build()
     }
 
     override fun onAttach(context: Context) {
