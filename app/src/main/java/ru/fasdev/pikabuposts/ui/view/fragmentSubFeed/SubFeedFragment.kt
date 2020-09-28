@@ -2,24 +2,27 @@ package ru.fasdev.pikabuposts.ui.view.fragmentSubFeed
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
 import ru.fasdev.pikabuposts.app.lifecycle.ViewModelFactory
 import ru.fasdev.pikabuposts.app.lifecycle.injectViewModel
 import ru.fasdev.pikabuposts.databinding.SubFeedFragmentBinding
+import ru.fasdev.pikabuposts.eventbus.event.UpdateSavedPost
 import ru.fasdev.pikabuposts.ui.adapter.epoxy.listFeed.ListFeedController
 import ru.fasdev.pikabuposts.ui.adapter.epoxy.listFeed.ListFeedModel
 import ru.fasdev.pikabuposts.ui.view.fragmentMainFeed.MainFeedFragment
 import ru.fasdev.pikabuposts.ui.view.fragmentPost.PostScreen
 import ru.terrakok.cicerone.Router
 import javax.inject.Inject
+
 
 class SubFeedFragment : Fragment(), ListFeedModel.Listener
 {
@@ -60,12 +63,16 @@ class SubFeedFragment : Fragment(), ListFeedModel.Listener
         fragmentFeedComponent.inject(this)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View?
     {
         binding = SubFeedFragmentBinding.inflate(inflater)
 
         binding.swipeRefresh.setOnRefreshListener {
-            viewModel.loadData()
+            viewModel.loadData(true)
         }
 
         binding.listFeed.layoutManager = LinearLayoutManager(requireContext())
@@ -98,6 +105,16 @@ class SubFeedFragment : Fragment(), ListFeedModel.Listener
         })
     }
 
+    override fun onStart() {
+        super.onStart()
+        EventBus.getDefault().register(this)
+    }
+
+    override fun onStop() {
+        EventBus.getDefault().unregister(this)
+        super.onStop()
+    }
+
     fun setErrorFeed(error: String?) {
         if (!error.isNullOrEmpty()) {
             binding.listFeed.visibility = View.GONE
@@ -122,5 +139,13 @@ class SubFeedFragment : Fragment(), ListFeedModel.Listener
     override fun readMoreClick(id: Long)
     {
         router.navigateTo(PostScreen(id))
+    }
+
+    @Subscribe
+    fun eventBusUpdatePost(event: UpdateSavedPost?) {
+        event?.targetMode.let {
+            if (it == getMode())
+                viewModel.updateSavedPost()
+        }
     }
 }

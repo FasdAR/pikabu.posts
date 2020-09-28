@@ -85,6 +85,8 @@ class PostFragment : Fragment(), View.OnClickListener
         binding.listImages.layoutManager = LinearLayoutManager(requireContext())
         binding.listImages.setController(listImageController)
 
+        binding.repeatBtn.setOnClickListener(this)
+
         return binding.root
     }
 
@@ -93,6 +95,21 @@ class PostFragment : Fragment(), View.OnClickListener
         super.onActivityCreated(savedInstanceState)
         viewModel = injectViewModel(viewModelFactory)
         viewModel.setIdPost(getIdKey())
+
+        viewModel.error.observe(viewLifecycleOwner, Observer {
+            if (it.isNullOrEmpty())
+            {
+                binding.post.visibility = View.VISIBLE
+                binding.errLayout.visibility = View.GONE
+            }
+            else
+            {
+                binding.post.visibility = View.GONE
+                binding.errLayout.visibility = View.VISIBLE
+
+                binding.error.setText(it)
+            }
+        })
 
         viewModel.data.observe(viewLifecycleOwner, Observer {
             val post = it.first
@@ -167,11 +184,6 @@ class PostFragment : Fragment(), View.OnClickListener
                 binding.post.visibility = View.GONE
             }
         })
-
-        viewModel.isRefreshed.observe(viewLifecycleOwner, Observer {
-            binding.swipeRefresh.isRefreshing = it
-            binding.swipeRefresh.isEnabled = it
-        })
     }
 
     fun getIdKey(): Long = arguments?.getLong(ID_KEY) ?: 0
@@ -194,6 +206,9 @@ class PostFragment : Fragment(), View.OnClickListener
         {
             R.id.save_btn -> {
                 viewModel.savedPost()
+            }
+            R.id.repeat_btn -> {
+                viewModel.setIdPost(getIdKey())
             }
         }
     }

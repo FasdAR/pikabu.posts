@@ -18,20 +18,20 @@
             android:id="@+id/list_feed"
             android:paddingBottom="16dp"
             android:clipToPadding="false"
-            app:itemSpacing="16dp"/>
+            app:itemSpacing="16dp"
+            android:visibility="visible"/>
 
         <TextView
+            android:padding="16dp"
+            android:background="#fff"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text=""
+            android:text="@string/no_internet"
             android:gravity="center"
             android:textColor="#000"
             android:id="@+id/text_error"
-            android:visibility="visible"
-            android:layout_gravity="center"
-            android:layout_marginBottom="40dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"/>
+            android:visibility="invisible"
+            android:layout_marginTop="16dp"/>
 
     </FrameLayout>
 

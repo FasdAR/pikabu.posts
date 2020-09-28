@@ -15,6 +15,7 @@ ext {
     material_lib_ver = "1.2.1"
     retrofit_ver = "2.6.2"
     okhttp_ver = "4.4.0"
+    eventbus_ver = "3.2.0"
 }
 
 android {
@@ -106,4 +107,7 @@ dependencies {
     implementation "com.squareup.retrofit2:retrofit:$retrofit_ver"
     implementation "com.squareup.retrofit2:converter-gson:$retrofit_ver"
     implementation "com.squareup.okhttp3:logging-interceptor:$okhttp_ver"
+
+    //EventBus
+    implementation "org.greenrobot:eventbus:$eventbus_ver"
 }

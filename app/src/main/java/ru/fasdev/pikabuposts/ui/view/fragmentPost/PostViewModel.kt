@@ -9,12 +9,14 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import ru.fasdev.pikabuposts.app.lifecycle.ZipLiveData
+import ru.fasdev.pikabuposts.data.network.NetworkErrorInteractor
 import ru.fasdev.pikabuposts.domain.post.boundaries.interactor.PostInteractor
 import ru.fasdev.pikabuposts.domain.post.boundaries.interactor.PostLocalInteractor
+import ru.fasdev.pikabuposts.domain.post.boundaries.interactor.PostNetworkInteractor
 import ru.fasdev.pikabuposts.domain.post.model.Post
 import javax.inject.Inject
 
-class PostViewModel @Inject constructor(val postInteractor: PostInteractor, val localInteractor: PostLocalInteractor): ViewModel()
+class PostViewModel @Inject constructor(val postInteractor: PostInteractor, val localInteractor: PostLocalInteractor, val errorInteractor: NetworkErrorInteractor): ViewModel()
 {
     var id: Long = 0L
 
@@ -24,10 +26,6 @@ class PostViewModel @Inject constructor(val postInteractor: PostInteractor, val 
     val error: MutableLiveData<String> = MutableLiveData()
 
     val data = ZipLiveData.zipLiveData(post, isSaved)
-
-    init {
-        Log.d("MODEL", System.identityHashCode(localInteractor).toString())
-    }
 
     fun setIdPost(id: Long)
     {
@@ -49,10 +47,10 @@ class PostViewModel @Inject constructor(val postInteractor: PostInteractor, val 
                     isRefreshed.postValue(false)
                 }
                 .catch {
-                    //TODO: CHANGE TO NORMAL ERROR
-                    error.postValue(it.message.toString())
+                    error.postValue(errorInteractor.getError(it))
                 }
                 .collect {
+                    error.postValue(null)
                     post.postValue(it)
                 }
         }

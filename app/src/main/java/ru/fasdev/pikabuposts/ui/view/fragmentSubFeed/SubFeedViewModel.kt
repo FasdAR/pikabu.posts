@@ -10,6 +10,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.greenrobot.eventbus.EventBus
 import retrofit2.HttpException
 import ru.fasdev.pikabuposts.R
 import ru.fasdev.pikabuposts.app.lifecycle.SingleLiveEvent
@@ -18,6 +19,7 @@ import ru.fasdev.pikabuposts.data.network.NetworkErrorInteractor
 import ru.fasdev.pikabuposts.domain.post.boundaries.interactor.PostLocalInteractor
 import ru.fasdev.pikabuposts.domain.post.boundaries.interactor.PostNetworkInteractor
 import ru.fasdev.pikabuposts.domain.post.model.Post
+import ru.fasdev.pikabuposts.eventbus.event.UpdateSavedPost
 import java.lang.Exception
 import java.lang.RuntimeException
 import java.net.UnknownHostException
@@ -42,25 +44,24 @@ class SubFeedViewModel
     val errorFeed: SingleLiveEvent<String?> = SingleLiveEvent()
     val errorSnackbar: SingleLiveEvent<String> = SingleLiveEvent()
 
-    init {
-        Log.d("MODEL", System.identityHashCode(postLocalInteractor).toString())
-    }
-
     fun setModeFeed(mode: Int)
     {
         this.mode = mode
 
-        loadData()
+        if (feed.value.isNullOrEmpty())
+            loadData(true)
+        else
+            loadData(false)
     }
 
-    fun loadData() {
+    fun loadData(isUser: Boolean) {
         viewModelScope.launch(Dispatchers.IO) {
-            loadPosts()
+            loadPosts(isUser)
             loadIdSavedPosts()
         }
     }
 
-    private suspend fun loadPosts() {
+    private suspend fun loadPosts(isUser: Boolean) {
         val flow: Flow<List<Post>> =
             if (mode == SubFeedFragment.LOCAL_MODE)
                 postLocalInteractor.getAllPosts()
@@ -70,16 +71,16 @@ class SubFeedViewModel
         flow
             .flowOn(Dispatchers.IO)
             .onStart {
-                isRefreshed.postValue(true)
+                if (isUser) isRefreshed.postValue(true)
             }
             .onCompletion {
-                isRefreshed.postValue(false)
+                if (isUser) isRefreshed.postValue(false)
             }
             .catch {
                 if (feed.value.isNullOrEmpty())
                     errorFeed.postValue(networkErrorInteractor.getError(it))
                 else
-                    errorSnackbar.postValue(networkErrorInteractor.getError(it))
+                    if (isUser) errorSnackbar.postValue(networkErrorInteractor.getError(it))
             }
             .collect {
                 if (it.isNullOrEmpty())
@@ -113,22 +114,26 @@ class SubFeedViewModel
         }
     }
 
+    fun updateSavedPost() {
+        viewModelScope.launch(Dispatchers.IO) {
+            if (mode == SubFeedFragment.LOCAL_MODE)
+                loadData(false)
+            else
+                loadIdSavedPosts()
+        }
+    }
+
     fun savedPost(id: Long)
     {
         GlobalScope.launch(Dispatchers.IO) {
             postLocalInteractor.savePost(id)
                 .flowOn(Dispatchers.IO)
-                .onStart {
-
-                }
-                .onCompletion {
-
-                }
                 .catch {
                     errorSnackbar.postValue(networkErrorInteractor.getError(it))
                 }
                 .collect {
                     loadIdSavedPosts()
+                    EventBus.getDefault().post(UpdateSavedPost(if (mode == SubFeedFragment.LOCAL_MODE) SubFeedFragment.NETWORK_MODE else SubFeedFragment.LOCAL_MODE));
                 }
 
         }
