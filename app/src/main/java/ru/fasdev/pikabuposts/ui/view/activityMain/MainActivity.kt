@@ -32,6 +32,10 @@ class MainActivity : AppCompatActivity()
             .build()
     }
 
+    val feedComponent by lazy {
+        return@lazy activitySubComponent.feedComponent().build()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?)
     {
         activitySubComponent.inject(this)

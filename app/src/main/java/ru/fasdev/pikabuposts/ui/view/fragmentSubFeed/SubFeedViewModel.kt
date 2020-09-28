@@ -6,12 +6,15 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
 import ru.fasdev.pikabuposts.R
+import ru.fasdev.pikabuposts.app.lifecycle.SingleLiveEvent
 import ru.fasdev.pikabuposts.app.lifecycle.ZipLiveData
+import ru.fasdev.pikabuposts.data.network.NetworkErrorInteractor
 import ru.fasdev.pikabuposts.domain.post.boundaries.interactor.PostLocalInteractor
 import ru.fasdev.pikabuposts.domain.post.boundaries.interactor.PostNetworkInteractor
 import ru.fasdev.pikabuposts.domain.post.model.Post
@@ -20,7 +23,13 @@ import java.lang.RuntimeException
 import java.net.UnknownHostException
 import javax.inject.Inject
 
-class SubFeedViewModel @Inject constructor(val postLocalInteractor: PostLocalInteractor, val postNetworkInteractor: PostNetworkInteractor, val context: Context) : ViewModel()
+class SubFeedViewModel
+    @Inject constructor(
+        val postLocalInteractor: PostLocalInteractor,
+        val postNetworkInteractor: PostNetworkInteractor,
+        val networkErrorInteractor: NetworkErrorInteractor,
+        val context: Context
+    ) : ViewModel()
 {
     private var mode: Int = SubFeedFragment.LOCAL_MODE
 
@@ -30,7 +39,8 @@ class SubFeedViewModel @Inject constructor(val postLocalInteractor: PostLocalInt
     val dataFeed = ZipLiveData.zipLiveData(feed, idSavedPosts)
 
     var isRefreshed: MutableLiveData<Boolean> = MutableLiveData()
-    val error: MutableLiveData<String> = MutableLiveData()
+    val errorFeed: SingleLiveEvent<String?> = SingleLiveEvent()
+    val errorSnackbar: SingleLiveEvent<String> = SingleLiveEvent()
 
     init {
         Log.d("MODEL", System.identityHashCode(postLocalInteractor).toString())
@@ -66,10 +76,21 @@ class SubFeedViewModel @Inject constructor(val postLocalInteractor: PostLocalInt
                 isRefreshed.postValue(false)
             }
             .catch {
-                error.postValue(getErrorMsg(it))
+                if (feed.value.isNullOrEmpty())
+                    errorFeed.postValue(networkErrorInteractor.getError(it))
+                else
+                    errorSnackbar.postValue(networkErrorInteractor.getError(it))
             }
             .collect {
-                feed.postValue(it)
+                if (it.isNullOrEmpty())
+                {
+                    errorFeed.postValue(context.resources.getString(R.string.empty_list))
+                }
+                else
+                {
+                    errorFeed.postValue(null)
+                    feed.postValue(it)
+                }
             }
     }
 
@@ -94,7 +115,7 @@ class SubFeedViewModel @Inject constructor(val postLocalInteractor: PostLocalInt
 
     fun savedPost(id: Long)
     {
-        viewModelScope.launch(Dispatchers.IO) {
+        GlobalScope.launch(Dispatchers.IO) {
             postLocalInteractor.savePost(id)
                 .flowOn(Dispatchers.IO)
                 .onStart {
@@ -104,25 +125,12 @@ class SubFeedViewModel @Inject constructor(val postLocalInteractor: PostLocalInt
 
                 }
                 .catch {
-                    error.postValue(getErrorMsg(it))
+                    errorSnackbar.postValue(networkErrorInteractor.getError(it))
                 }
                 .collect {
                     loadIdSavedPosts()
                 }
 
-        }
-        postLocalInteractor.savePost(id)
-    }
-
-    fun getErrorMsg(ex: Throwable): String {
-        when (ex)
-        {
-            is UnknownHostException -> {
-                return context.resources.getString(R.string.no_internet)
-            }
-            else -> {
-                return context.resources.getString(R.string.no_internet)
-            }
         }
     }
 }

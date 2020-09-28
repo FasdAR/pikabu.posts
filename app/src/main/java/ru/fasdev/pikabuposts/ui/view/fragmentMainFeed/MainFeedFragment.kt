@@ -2,6 +2,7 @@ package ru.fasdev.pikabuposts.ui.view.fragmentMainFeed
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -39,12 +40,12 @@ class MainFeedFragment : Fragment()
         listOf(resources.getString(R.string.feed_posts), resources.getString(R.string.saved_posts))
     }
 
-    val fragmentSubComponent by lazy {
-        return@lazy (requireActivity() as MainActivity).activitySubComponent
-            .fragmentComponent()
-            .build()
-            .feedComponent()
-            .build()
+    private val fragmentSubComponent by lazy {
+        return@lazy (requireActivity() as MainActivity).activitySubComponent.fragmentComponent().build()
+    }
+
+    val feedComponent by lazy {
+        return@lazy (requireActivity() as MainActivity).feedComponent
     }
 
     override fun onAttach(context: Context) {

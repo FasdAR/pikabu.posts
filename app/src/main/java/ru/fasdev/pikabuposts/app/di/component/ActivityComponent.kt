@@ -20,6 +20,7 @@ interface ActivityComponent
 {
     fun inject(mainActivity: MainActivity)
 
+    fun feedComponent(): FeedComponent.Builder
     fun fragmentComponent(): FragmentComponent.Builder
 
     @Subcomponent.Builder

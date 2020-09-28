@@ -2,6 +2,7 @@ package ru.fasdev.pikabuposts.ui.view.fragmentSubFeed
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -9,7 +10,7 @@ import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
-import ru.fasdev.pikabuposts.R
+import com.google.android.material.snackbar.Snackbar
 import ru.fasdev.pikabuposts.app.lifecycle.ViewModelFactory
 import ru.fasdev.pikabuposts.app.lifecycle.injectViewModel
 import ru.fasdev.pikabuposts.databinding.SubFeedFragmentBinding
@@ -48,7 +49,7 @@ class SubFeedFragment : Fragment(), ListFeedModel.Listener
     lateinit var router: Router
 
     val fragmentFeedComponent by lazy {
-        return@lazy (parentFragment as MainFeedFragment).fragmentSubComponent
+        return@lazy (parentFragment as MainFeedFragment).feedComponent
     }
 
     val listFeedController: ListFeedController = ListFeedController(this)
@@ -80,27 +81,24 @@ class SubFeedFragment : Fragment(), ListFeedModel.Listener
         viewModel.setModeFeed(getMode())
 
         viewModel.dataFeed.observe(viewLifecycleOwner, Observer {
-            if (it.first.isNullOrEmpty()) {
-                setError(resources.getString(R.string.empty_list))
-            }
-            else
-            {
-                setError(null)
-
-                listFeedController.setData(it.first, it.second)
-            }
+            listFeedController.setData(it.first, it.second)
         })
 
         viewModel.isRefreshed.observe(viewLifecycleOwner, Observer {
             binding.swipeRefresh.isRefreshing = it
         })
 
-        viewModel.error.observe(viewLifecycleOwner, Observer {
-            setError(it)
+        viewModel.errorFeed.observe(viewLifecycleOwner, Observer {
+            setErrorFeed(it)
+        })
+
+        viewModel.errorSnackbar.observe(viewLifecycleOwner, Observer {
+            Snackbar.make(binding.root, it, Snackbar.LENGTH_LONG)
+                .show()
         })
     }
 
-    fun setError(error: String?) {
+    fun setErrorFeed(error: String?) {
         if (!error.isNullOrEmpty()) {
             binding.listFeed.visibility = View.GONE
             binding.textError.visibility = View.VISIBLE

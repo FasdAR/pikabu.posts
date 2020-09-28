@@ -55,11 +55,7 @@ class PostFragment : Fragment(), View.OnClickListener
     private lateinit var binding: PostFragmentBinding
 
     val fragmentPostComponent by lazy {
-        return@lazy ((requireActivity() as MainActivity).activitySubComponent)
-            .fragmentComponent()
-            .build()
-            .feedComponent()
-            .build()
+        return@lazy (requireActivity() as MainActivity).feedComponent
     }
 
     val listImageController = ListImageController()

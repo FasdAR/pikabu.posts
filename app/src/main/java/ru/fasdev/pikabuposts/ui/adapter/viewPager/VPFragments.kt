@@ -1,5 +1,6 @@
 package ru.fasdev.pikabuposts.ui.adapter.viewPager
 
+import android.util.Log
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
@@ -8,8 +9,6 @@ import ru.fasdev.pikabuposts.ui.adapter.viewPager.fabric.VPFactory
 
 class VPFragments (val fm: FragmentManager, val lifecycle: Lifecycle, val fabricFragment: VPFactory): FragmentStateAdapter(fm, lifecycle)
 {
-    private val listFragments: ArrayList<Fragment?> = arrayListOf()
-
     override fun getItemCount(): Int
     {
         return fabricFragment.getSize()
@@ -18,8 +17,6 @@ class VPFragments (val fm: FragmentManager, val lifecycle: Lifecycle, val fabric
     override fun createFragment(position: Int): Fragment
     {
         val createFragment = fabricFragment.createFragment(position)
-
-        listFragments.add(createFragment)
 
         createFragment?.let {
             return it

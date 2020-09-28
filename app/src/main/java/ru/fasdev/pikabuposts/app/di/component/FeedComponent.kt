@@ -23,6 +23,6 @@ interface FeedComponent
     }
 
     fun inject(app: MainFeedFragment)
-    fun inject(subFragment: SubFeedFragment)
+    fun inject(subFeedFragment: SubFeedFragment)
     fun inject(postFragment: PostFragment)
 }

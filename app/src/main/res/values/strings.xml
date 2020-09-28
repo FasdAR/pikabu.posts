@@ -11,5 +11,5 @@
     <string name="remove_save">Убрать из сохраненного</string>
     <string name="read_more">Читать далее</string>
 
-    <string name="no_internet">Не удалось загрузить данные, проверьте наличие интернета на устройстве.</string>
+    <string name="no_internet">Не удалось загрузить данные, проверьте наличие интернета на устройстве</string>
 </resources>

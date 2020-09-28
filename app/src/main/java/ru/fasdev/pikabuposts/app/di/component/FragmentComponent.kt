@@ -24,5 +24,5 @@ interface FragmentComponent
         fun build(): FragmentComponent
     }
 
-    fun feedComponent(): FeedComponent.Builder
+    fun inject(mainFeedFragment: MainFeedFragment)
 }
