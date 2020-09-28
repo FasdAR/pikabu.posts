@@ -21,10 +21,11 @@
             android:id="@+id/tab_layout"
             android:background="@color/colorPrimary"
             app:tabRippleColor="@color/colorPrimaryRipple"
-            app:tabMode="scrollable"
+            app:tabMode="fixed"
             app:tabTextColor="#B3FFFFFF"
             app:tabSelectedTextColor="#fff"
-            app:tabIndicatorColor="#fff"/>
+            app:tabIndicatorColor="#fff"
+            style="@style/CustomTabLayout"/>
 
     </com.google.android.material.appbar.AppBarLayout>
 
