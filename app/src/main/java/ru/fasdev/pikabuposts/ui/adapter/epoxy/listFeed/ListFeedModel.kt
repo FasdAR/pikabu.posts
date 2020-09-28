@@ -121,6 +121,7 @@ abstract class ListFeedModel : EpoxyModelWithHolder<ListFeedModel.Holder>(), Vie
                 .load(post.images?.get(0))
                 .apply(getImageRequestOprion())
                 .transition(DrawableTransitionOptions.withCrossFade())
+                .dontTransform()
                 .into(holder.mainImage);
         }
         else

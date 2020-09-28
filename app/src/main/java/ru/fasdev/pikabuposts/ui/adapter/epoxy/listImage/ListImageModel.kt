@@ -38,6 +38,7 @@ abstract class ListImageModel : EpoxyModelWithHolder<ListImageModel.Holder>()
             .load(url)
             .apply(getImageRequestOprion())
             .transition(DrawableTransitionOptions.withCrossFade())
+            .dontTransform()
             .into(holder.mainImage);
     }
 

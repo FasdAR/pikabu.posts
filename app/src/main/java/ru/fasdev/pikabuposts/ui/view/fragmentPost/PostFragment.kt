@@ -159,6 +159,7 @@ class PostFragment : Fragment(), View.OnClickListener
                         .load(post.images?.get(0))
                         .apply(getImageRequestOprion())
                         .transition(DrawableTransitionOptions.withCrossFade())
+                        .dontTransform()
                         .into(mainImage);
 
                     if (imageSize >= 1)
