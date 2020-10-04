@@ -6,7 +6,9 @@ import dagger.Module
 import dagger.Provides
 import ru.fasdev.pikabuposts.app.di.scope.AppScope
 import ru.fasdev.pikabuposts.data.source.room.AppDataBase
+import ru.fasdev.pikabuposts.data.source.room.dao.ImageDao
 import ru.fasdev.pikabuposts.data.source.room.dao.PostDao
+import ru.fasdev.pikabuposts.data.source.room.dao.PostImageDao
 
 @Module
 class RoomModule
@@ -18,4 +20,12 @@ class RoomModule
     @Provides
     @AppScope
     fun providePostDao(appDataBase: AppDataBase): PostDao = appDataBase.postDao()
+
+    @Provides
+    @AppScope
+    fun provideImageDao(appDataBase: AppDataBase): ImageDao = appDataBase.imageDao()
+
+    @Provides
+    @AppScope
+    fun providePostImageDao(appDataBase: AppDataBase): PostImageDao = appDataBase.postImageDao()
 }

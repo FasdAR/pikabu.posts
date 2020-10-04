@@ -11,6 +11,7 @@ import ru.fasdev.pikabuposts.data.post.dataStore.source.RoomDataStore
 import ru.fasdev.pikabuposts.data.post.repo.PostRepoImpl
 import ru.fasdev.pikabuposts.data.source.retrofit.pikabu.api.PikabuApi
 import ru.fasdev.pikabuposts.data.source.room.dao.PostDao
+import ru.fasdev.pikabuposts.data.source.room.dao.PostImageDao
 import ru.fasdev.pikabuposts.domain.post.boundaries.interactor.PostLocalInteractor
 import ru.fasdev.pikabuposts.domain.post.boundaries.repo.PostRepo
 import ru.fasdev.pikabuposts.domain.post.interactor.PostLocalInteractorImpl
@@ -24,7 +25,7 @@ class FeedModule
 
     @Provides
     @FeedScope
-    fun provideLocalDataStore(postDao: PostDao): LocalPostDataStore = RoomDataStore(postDao)
+    fun provideLocalDataStore(postImageDao: PostImageDao, postDao: PostDao): LocalPostDataStore = RoomDataStore(postImageDao, postDao)
 
     @Provides
     @FeedScope

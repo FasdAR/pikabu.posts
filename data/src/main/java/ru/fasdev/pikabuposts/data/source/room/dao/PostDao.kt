@@ -1,12 +1,8 @@
 package ru.fasdev.pikabuposts.data.source.room.dao
 
-import androidx.room.Dao
-import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.Query
+import androidx.room.*
 import ru.fasdev.pikabuposts.data.source.room.AppDataBase.Companion.POST_TABLE_NAME
 import ru.fasdev.pikabuposts.data.source.room.model.PostDB
-import ru.fasdev.pikabuposts.domain.post.model.Post
 
 @Dao
 interface PostDao
@@ -18,7 +14,7 @@ interface PostDao
     fun getById(id: Long): PostDB?
 
     @Insert
-    fun insertPost(post: PostDB)
+    fun insert(data: PostDB)
 
     @Query("DELETE FROM ${POST_TABLE_NAME} WHERE id = :id")
     fun removeById(id: Long)
