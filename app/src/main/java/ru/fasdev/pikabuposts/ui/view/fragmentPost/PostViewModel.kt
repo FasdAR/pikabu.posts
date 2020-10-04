@@ -19,6 +19,12 @@ import javax.inject.Inject
 class PostViewModel @Inject constructor(val postInteractor: PostInteractor, val localInteractor: PostLocalInteractor, val errorInteractor: NetworkErrorInteractor): ViewModel()
 {
     var id: Long = 0L
+        set(value) {
+            field = value
+
+            loadPost()
+            loadIsSaved(id)
+        }
 
     private val post: MutableLiveData<Post> = MutableLiveData()
     private val isSaved: MutableLiveData<Boolean> = MutableLiveData()
@@ -26,14 +32,6 @@ class PostViewModel @Inject constructor(val postInteractor: PostInteractor, val 
     val error: MutableLiveData<String> = MutableLiveData()
 
     val data = ZipLiveData.zipLiveData(post, isSaved)
-
-    fun setIdPost(id: Long)
-    {
-        this.id = id
-
-        loadPost()
-        loadIsSaved(id)
-    }
 
     fun loadPost()
     {

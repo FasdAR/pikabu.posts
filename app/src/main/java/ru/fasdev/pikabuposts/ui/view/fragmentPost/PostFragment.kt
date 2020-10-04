@@ -94,7 +94,7 @@ class PostFragment : Fragment(), View.OnClickListener
     {
         super.onActivityCreated(savedInstanceState)
         viewModel = injectViewModel(viewModelFactory)
-        viewModel.setIdPost(getIdKey())
+        viewModel.id = getIdKey()
 
         viewModel.error.observe(viewLifecycleOwner, Observer {
             if (it.isNullOrEmpty())
@@ -209,7 +209,7 @@ class PostFragment : Fragment(), View.OnClickListener
                 viewModel.savedPost()
             }
             R.id.repeat_btn -> {
-                viewModel.setIdPost(getIdKey())
+                viewModel.id = getIdKey()
             }
         }
     }

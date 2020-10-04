@@ -33,7 +33,15 @@ class SubFeedViewModel
         val context: Context
     ) : ViewModel()
 {
-    private var mode: Int = SubFeedFragment.LOCAL_MODE
+    var mode: Int = SubFeedFragment.LOCAL_MODE
+        set(value) {
+            field = value
+
+            if (feed.value.isNullOrEmpty())
+                loadData(true)
+            else
+                loadData(false)
+        }
 
     private val feed: MutableLiveData<List<Post>> = MutableLiveData()
     private val idSavedPosts: MutableLiveData<List<Long>> = MutableLiveData()
@@ -43,16 +51,6 @@ class SubFeedViewModel
     var isRefreshed: MutableLiveData<Boolean> = MutableLiveData()
     val errorFeed: SingleLiveEvent<String?> = SingleLiveEvent()
     val errorSnackbar: SingleLiveEvent<String> = SingleLiveEvent()
-
-    fun setModeFeed(mode: Int)
-    {
-        this.mode = mode
-
-        if (feed.value.isNullOrEmpty())
-            loadData(true)
-        else
-            loadData(false)
-    }
 
     fun loadData(isUser: Boolean) {
         viewModelScope.launch(Dispatchers.IO) {

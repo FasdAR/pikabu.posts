@@ -85,7 +85,7 @@ class SubFeedFragment : Fragment(), ListFeedModel.Listener
     {
         super.onActivityCreated(savedInstanceState)
         viewModel = injectViewModel(viewModelFactory)
-        viewModel.setModeFeed(getMode())
+        viewModel.mode = getMode()
 
         viewModel.dataFeed.observe(viewLifecycleOwner, Observer {
             listFeedController.setData(it.first, it.second)
